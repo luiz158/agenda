@@ -1,0 +1,24 @@
+* {
+    font-size: 12px;
+}
+.colLogo {
+    width: 215px;
+}
+
+.edit {
+    text-indent: -99999px;
+    overflow: hidden;
+    background-image: url(../images/edit.png);
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+
+.add {
+    text-indent: -99999px;
+    overflow: hidden;
+    background-image: url(../images/add.png);
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}

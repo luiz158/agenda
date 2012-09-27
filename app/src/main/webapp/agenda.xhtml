@@ -1,0 +1,122 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+    <ui:define name="body">
+        <h:form id="frm">
+            <p:dialog widgetVar="dlgObjetivo" header="Objetivo" modal="true">
+                <h:panelGrid id="dlgObjetivoDisplay" columns="2">
+                    <h:outputLabel value="ID" for="idObj" />
+                    <h:outputText value="#{objetivoMB.objetivo.id}" id="idObj"/>
+
+                    <h:outputLabel value="Descrição" for="descricaoObj" />
+                    <p:inputText value="#{objetivoMB.objetivo.descricao}" id="descricaoObj" size="40">
+                        <p:focus />
+                    </p:inputText>
+                    
+                    <p:commandButton value="Salvar" action="#{objetivoMB.salvar(true)}"
+                                     oncomplete="dlgObjetivo.hide()"
+                                     update=":frm:objetivo"/>
+                </h:panelGrid>
+            </p:dialog>
+
+            <p:dialog widgetVar="dlgAgendamento" header="Agendamento">
+                <h:panelGrid id="dlgAgendamentoDisplay" columns="2">
+
+                    <h:outputLabel value="ID" for="id" />
+                    <h:outputText value="#{agendaMB.agendamento.id}" id="id" />
+
+                    <h:outputLabel value="Descrição" for="descricao" />
+                    <p:inputText value="#{agendaMB.agendamento.descricao}" id="descricao" size="60" />
+
+                    <h:outputLabel value="Início" for="inicio" />
+                    <p:calendar value="#{agendaMB.agendamento.inicio}" id="inicio" 
+                                pattern="dd/MM/yyyy HH:mm"
+                                size="17"
+                                locale="pt"/>
+
+                    <h:outputLabel value="Término" for="termino" />
+                    <p:calendar value="#{agendaMB.agendamento.termino}" id="termino" 
+                                pattern="dd/MM/yyyy HH:mm"
+                                size="17"
+                                locale="pt"/>
+
+                    <h:outputLabel value="Projeto" for="projeto" />
+                    <p:autoComplete value="#{agendaMB.agendamento.projeto}" id="projeto"
+                                    completeMethod="#{projetoMB.filtrarPorNome}"
+                                    converter="projetoConverter"
+                                    maxResults="20"
+                                    var="proj"
+                                    itemLabel="#{proj.nome}"
+                                    itemValue="#{proj}"
+                                    forceSelection="true"
+                                    dropdown="true"
+                                    size="45"/>
+
+                    <h:outputLabel value="Recurso" for="recurso" />
+                    <p:autoComplete value="#{agendaMB.agendamento.recurso}" id="recurso"
+                                    completeMethod="#{recursoMB.filtrarPorNome}"
+                                    converter="recursoConverter"
+                                    maxResults="20"
+                                    var="rec"
+                                    itemLabel="#{rec.nome}"
+                                    itemValue="#{rec}"
+                                    forceSelection="true"
+                                    dropdown="true"
+                                    size="45"/>
+
+                    <h:outputLabel value="Objetivo" for="objetivo" />
+                    <h:panelGroup id="objetivo">
+                        <p:autoComplete value="#{agendaMB.agendamento.objetivo}"
+                                        completeMethod="#{objetivoMB.filtrarPorNome}"
+                                        converter="objetivoConverter"
+                                        maxResults="20"
+                                        var="obj"
+                                        itemLabel="#{obj.descricao}"
+                                        itemValue="#{obj}"
+                                        forceSelection="true"
+                                        dropdown="true"
+                                        size="45">
+                            <p:ajax event="itemSelect" update=":frm:objetivo" />
+                        </p:autoComplete>
+                        <p:commandLink styleClass="add" title="Novo" 
+                                       onclick="dlgObjetivo.show();" 
+                                       update="dlgObjetivoDisplay" 
+                                       action="#{objetivoMB.novoObjetivo()}"/>
+                        <p:commandLink styleClass="edit" title="Editar" 
+                                       oncomplete="dlgObjetivo.show();" 
+                                       update="dlgObjetivoDisplay" rendered="#{agendaMB.agendamento.objetivo != null}">
+                            <f:setPropertyActionListener target="#{objetivoMB.objetivo}" value="#{agendaMB.agendamento.objetivo}" />
+                        </p:commandLink>
+                    </h:panelGroup>
+
+                    <p:commandButton value="Salvar" action="#{agendaMB.salvar()}" update=":frm" />
+                </h:panelGrid>
+            </p:dialog>
+
+
+
+            <p:layout style="min-width:400px;min-height:900px;" id="layout">  
+                <p:layoutUnit position="west" resizable="true" size="200" minSize="200" maxSize="200"
+                              collapsible="true">
+                    <p:menu style="width: 182px;">
+                        <p:menuitem value="Novo Agendamento" action="#{agendaMB.criarAgendamento()}" 
+                                    oncomplete="dlgAgendamento.show()" 
+                                    update="dlgAgendamentoDisplay"/>
+                    </p:menu>
+                </p:layoutUnit>  
+
+                <p:layoutUnit position="center">  
+                    <p:schedule locale="pt" value="#{agendaMB.scheduleModel}">
+                        <p:ajax event="dateSelect" listener="#{agendaMB.onDateSelect}" update="dlgAgendamentoDisplay" oncomplete="dlgAgendamento.show()" />  
+                        <p:ajax event="eventSelect" listener="#{agendaMB.onEventSelect}" update="dlgAgendamentoDisplay" oncomplete="dlgAgendamento.show()" />  
+                        <p:ajax event="eventMove" listener="#{agendaMB.onEventMove}" update=":frm" />  
+                        <p:ajax event="eventResize" listener="#{agndaMB.onEventResize}" update=":frm" /> 
+                    </p:schedule>
+                </p:layoutUnit>  
+            </p:layout>  
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

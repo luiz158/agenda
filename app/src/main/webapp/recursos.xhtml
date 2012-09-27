@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+    <ui:define name="body">
+        <p:panel>
+            <h:form id="frm">
+                <p:dialog widgetVar="dlgRecurso" header="Recurso">
+                    <h:panelGrid columns="2" id="dlgRecursoDisplay">
+                        <h:outputLabel value="ID" for="id" />
+                        <h:outputText value="#{recursoMB.recurso.id}" id="id" />
+                        
+                        <h:outputLabel value="Nome" for="nome" />
+                        <p:inputText value="#{recursoMB.recurso.nome}" id="nome" size="50"/>
+                        
+                        <h:outputLabel value="E-mail" for="email" />
+                        <p:inputText value="#{recursoMB.recurso.email}" id="email" size="50" />
+                        
+                        <p:commandButton value="Salvar" action="#{recursoMB.salvar()}"
+                                         oncomplete="dlgRecurso.hide()"
+                                         update="listRecursos"/>
+                    </h:panelGrid>
+                </p:dialog>
+                
+                <p:commandLink value="Novo" action="#{recursoMB.criarRecurso()}" 
+                               oncomplete="dlgRecurso.show()" update="dlgRecursoDisplay" />
+                
+                <p:dataTable value="#{recursoMB.list}" var="rec" id="listRecursos"
+                             selectionMode="single"
+                             rowKey="#{rec.id}">
+                    <p:ajax event="rowSelect" listener="#{recursoMB.onRowSelect}" update=":frm:dlgRecursoDisplay" oncomplete="dlgRecurso.show()"/>
+                    <p:column headerText="ID">
+                        <h:outputText value="#{rec.id}" />
+                    </p:column>
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{rec.nome}" />
+                    </p:column>
+                    <p:column headerText="E-mail">
+                        <h:outputText value="#{rec.email}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

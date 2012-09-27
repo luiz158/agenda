@@ -1,0 +1,43 @@
+<html xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <f:view contentType="text/html" locale="#currentLocale" />
+
+    <h:head>
+        <title>Agenda</title>
+        <link type="text/css" rel="stylesheet" href="css/default.css" />
+        <script type="text/javascript" src="js/primefaces-pt_br.js"></script>
+    </h:head>
+
+    <h:body>
+        <h:form id="frm">
+            
+            <p:dialog resizable="false" showHeader="false" closable="false" draggable="false"
+                      visible="true">
+                <h1>Acesso ao sistema</h1>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="E-mail" for="email" />
+                    <p:inputText value="#{loginMB.email}" id="email" size="40" />
+
+                    <h:outputLabel value="Senha" for="senha" />
+                    <p:password value="#{loginMB.senha}" id="senha" />
+
+                    <p:commandButton value="Login" action="#{loginMB.doLogin()}" ajax="false" />
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+        
+        <p:growl id="messages" globalOnly="true" autoUpdate="true" 
+                 life="5000"/>
+
+        <p:ajaxStatus style="width:16px;height:16px;">
+            <f:facet name="start">
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+    </h:body>
+</html>

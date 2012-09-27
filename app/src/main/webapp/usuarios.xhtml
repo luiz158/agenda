@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+    <ui:define name="body">
+        <p:panel>
+            <h:form id="frm">
+                <p:dialog widgetVar="dlgUsuario" header="Usuário" >
+                    <h:panelGrid id="dlgUsuarioDisplay" columns="2">
+                        <h:outputLabel value="ID" for="id" />
+                        <h:outputText value="#{usuarioMB.usuario.id}" id="id"/>
+
+                        <h:outputLabel value="Nome" for="nome" />
+                        <p:inputText value="#{usuarioMB.usuario.nome}" id="nome" size="50"/>
+
+                        <h:outputLabel value="E-mail" for="email" />
+                        <p:inputText value="#{usuarioMB.usuario.email}" id="email" size="50"/>
+
+                        <h:outputLabel value="Perfis" for="perfis" />
+                        <p:selectManyCheckbox value="#{usuarioMB.usuario.perfis}" converter="perfilConverter">
+                            <f:selectItems value="#{perfilMB.list}" var="perfil" itemLabel="#{perfil.nome}" itemValue="#{perfil}" />
+                        </p:selectManyCheckbox>
+                        
+                        <p:commandButton value="Salvar" action="#{usuarioMB.salvar()}" update="listUsuarios"
+                                         oncomplete="dlgUsuario.hide()"/>
+                    </h:panelGrid>
+                </p:dialog>
+
+                <p:commandLink value="Novo" 
+                               onclick="dlgUsuario.show()" 
+                               update="dlgUsuarioDisplay" 
+                               action="#{usuarioMB.novo()}" />
+
+                <p:dataTable value="#{usuarioMB.list}" var="usuario" id="listUsuarios"
+                             selectionMode="single"
+                             rowKey="#{usuario.id}">
+                    <p:ajax event="rowSelect" listener="#{usuarioMB.onRowSelect}" oncomplete="dlgUsuario.show()" update=":frm:dlgUsuarioDisplay"/>
+                    <p:column headerText="ID">
+                        <h:outputText value="#{usuario.id}" />
+                    </p:column>
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{usuario.nome}" />
+                    </p:column>
+                    <p:column headerText="E-mail">
+                        <h:outputText value="#{usuario.email}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>
