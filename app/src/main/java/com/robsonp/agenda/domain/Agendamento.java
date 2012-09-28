@@ -36,6 +36,9 @@ public class Agendamento {
     private Recurso recurso;
     
     @ManyToOne
+    private Local local;
+    
+    @ManyToOne
     private Projeto projeto;
 
     public Agendamento() {
@@ -104,6 +107,14 @@ public class Agendamento {
 
     public void setProjeto(Projeto projeto) {
         this.projeto = projeto;
+    }
+
+    public Local getLocal() {
+        return local;
+    }
+
+    public void setLocal(Local local) {
+        this.local = local;
     }
     
 }

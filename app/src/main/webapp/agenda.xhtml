@@ -3,7 +3,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
 
     <ui:define name="body">
-        <h:form id="frm">
+        <h:form id="frm" prependId="false">
             <p:dialog widgetVar="dlgObjetivo" header="Objetivo" modal="true">
                 <h:panelGrid id="dlgObjetivoDisplay" columns="2">
                     <h:outputLabel value="ID" for="idObj" />
@@ -64,6 +64,18 @@
                                     forceSelection="true"
                                     dropdown="true"
                                     size="45"/>
+                    
+                    <h:outputLabel value="Local" for="local" />
+                    <p:autoComplete value="#{agendaMB.agendamento.local}" id="local"
+                                    completeMethod="#{localMB.filtrarPorNome}"
+                                    converter="localConverter"
+                                    maxResults="20"
+                                    var="loc"
+                                    itemLabel="#{loc.nome}"
+                                    itemValue="#{loc}"
+                                    forceSelection="true"
+                                    dropdown="true"
+                                    size="45"/>
 
                     <h:outputLabel value="Objetivo" for="objetivo" />
                     <h:panelGroup id="objetivo">
@@ -90,7 +102,8 @@
                         </p:commandLink>
                     </h:panelGroup>
 
-                    <p:commandButton value="Salvar" action="#{agendaMB.salvar()}" update=":frm" />
+                    <p:commandButton value="Salvar" action="#{agendaMB.salvar()}" update=":frm" 
+                                     oncomplete="dlgAgendamento.hide()"/>
                 </h:panelGrid>
             </p:dialog>
 
@@ -104,10 +117,14 @@
                                     oncomplete="dlgAgendamento.show()" 
                                     update="dlgAgendamentoDisplay"/>
                     </p:menu>
+                    <p:selectManyCheckbox converter="recursoConverter" layout="pageDirection">
+                        <f:selectItems value="#{recursoMB.list}" var="rec" itemLabel="#{rec.nome}" itemValue="#{rec}" />
+                        <p:ajax event="itemSelect" process="@this" update="agenda" listener="#{agendaMB.updateScheduleModel}" />
+                    </p:selectManyCheckbox>
                 </p:layoutUnit>  
 
                 <p:layoutUnit position="center">  
-                    <p:schedule locale="pt" value="#{agendaMB.scheduleModel}">
+                    <p:schedule locale="pt" value="#{agendaMB.scheduleModel}" id="agenda">
                         <p:ajax event="dateSelect" listener="#{agendaMB.onDateSelect}" update="dlgAgendamentoDisplay" oncomplete="dlgAgendamento.show()" />  
                         <p:ajax event="eventSelect" listener="#{agendaMB.onEventSelect}" update="dlgAgendamentoDisplay" oncomplete="dlgAgendamento.show()" />  
                         <p:ajax event="eventMove" listener="#{agendaMB.onEventMove}" update=":frm" />  

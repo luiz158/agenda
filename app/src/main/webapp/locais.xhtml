@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+    <ui:define name="body">
+        <p:panel>
+            <h:form id="frm">
+                <p:dialog widgetVar="dlgLocal" header="Local" >
+                    <h:panelGrid id="dlgLocalDisplay" columns="2">
+                        <h:outputLabel value="ID" for="id" />
+                        <h:outputText value="#{localMB.local.id}" id="id"/>
+
+                        <h:outputLabel value="Nome" for="nome" />
+                        <p:inputText value="#{localMB.local.nome}" id="nome" size="50"/>
+
+                        <p:commandButton value="Salvar" action="#{localMB.salvar()}" update="listLocais"
+                                         oncomplete="dlgLocal.hide()"/>
+                    </h:panelGrid>
+                </p:dialog>
+
+                <p:commandLink value="Novo" 
+                               onclick="dlgLocal.show()" 
+                               update="dlgLocalDisplay" 
+                               action="#{localMB.novo()}" />
+
+                <p:dataTable value="#{localMB.list}" var="local" id="listLocais"
+                             selectionMode="single"
+                             rowKey="#{local.id}">
+                    <p:ajax event="rowSelect" listener="#{localMB.onRowSelect}" oncomplete="dlgLocal.show()" update=":frm:dlgLocalDisplay"/>
+                    <p:column headerText="ID">
+                        <h:outputText value="#{local.id}" />
+                    </p:column>
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{local.nome}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

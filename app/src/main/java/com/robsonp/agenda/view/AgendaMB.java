@@ -5,8 +5,10 @@ import br.gov.frameworkdemoiselle.message.SeverityType;
 import br.gov.frameworkdemoiselle.stereotype.ViewController;
 import br.gov.frameworkdemoiselle.transaction.Transactional;
 import com.robsonp.agenda.domain.Agendamento;
+import com.robsonp.agenda.domain.Recurso;
 import com.robsonp.agenda.domain.repository.AgendamentoRepository;
 import com.robsonp.agenda.view.schedule.AgendamentoScheduleEvent;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
@@ -15,7 +17,6 @@ import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.ScheduleEntrySelectEvent;
 import org.primefaces.model.DefaultScheduleModel;
-import org.primefaces.model.MenuModel;
 import org.primefaces.model.ScheduleModel;
 
 @ViewController
@@ -30,6 +31,11 @@ public class AgendaMB {
 
     @Inject
     private MessageContext messageContext;
+    
+    private List<Recurso> filtroRecursos = new ArrayList<Recurso>();
+
+    public AgendaMB() {
+    }
     
     public Agendamento getAgendamento() {
         return agendamento;
@@ -73,8 +79,8 @@ public class AgendaMB {
         agendamentoRepository.add(agendamento);
     }
 
-    private void updateScheduleModel() {
-        List<Agendamento> agendamentos = agendamentoRepository.getAll();
+    public void updateScheduleModel() {
+        List<Agendamento> agendamentos = agendamentoRepository.getAllForResources(filtroRecursos);
         
         scheduleModel = new DefaultScheduleModel();
         for(Agendamento ag : agendamentos)
@@ -91,6 +97,7 @@ public class AgendaMB {
         try {
             agendamentoRepository.add(agendamento);
             messageContext.add("Agendameto adicionado", SeverityType.INFO);
+            updateScheduleModel();
         } catch (Exception e) {
             messageContext.add("Erro: " + e.getMessage(), SeverityType.ERROR);
         }
@@ -101,6 +108,7 @@ public class AgendaMB {
         try {
             agendamentoRepository.remove(agendamento.getId());
             messageContext.add("Agendameto removido", SeverityType.INFO);
+            updateScheduleModel();
         } catch (Exception e) {
             messageContext.add("Erro: " + e.getMessage(), SeverityType.ERROR);
         }

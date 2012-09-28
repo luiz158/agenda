@@ -21,6 +21,7 @@
                             <p:menuitem value="Agenda" url="agenda.jsf" />
                             <p:menuitem value="Recursos" url="recursos.jsf"/>
                             <p:menuitem value="Usuários" url="usuarios.jsf" rendered="#{securityContext.hasRole('admin')}"/>
+                            <p:menuitem value="Locais" url="locais.jsf"/>
                             <p:menuitem value="Sair" action="#{securityContext.logout()}" ajax="false"/>
                         </p:menubar>
                     </h:panelGrid>
