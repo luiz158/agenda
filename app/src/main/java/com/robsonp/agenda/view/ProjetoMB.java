@@ -63,4 +63,8 @@ public class ProjetoMB {
     public void onRowSelect(SelectEvent event) {
         projeto = (Projeto) event.getObject();
     }
+    
+    public void novo(){
+        projeto = new Projeto();
+    }
 }

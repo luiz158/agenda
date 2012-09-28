@@ -119,7 +119,6 @@
                     </p:menu>
                     <p:selectManyCheckbox converter="recursoConverter" layout="pageDirection">
                         <f:selectItems value="#{recursoMB.list}" var="rec" itemLabel="#{rec.nome}" itemValue="#{rec}" />
-                        <p:ajax event="itemSelect" process="@this" update="agenda" listener="#{agendaMB.updateScheduleModel}" />
                     </p:selectManyCheckbox>
                 </p:layoutUnit>  
 

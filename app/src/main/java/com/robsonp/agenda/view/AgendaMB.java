@@ -80,7 +80,12 @@ public class AgendaMB {
     }
 
     public void updateScheduleModel() {
-        List<Agendamento> agendamentos = agendamentoRepository.getAllForResources(filtroRecursos);
+        List<Agendamento> agendamentos = null;
+        if(filtroRecursos.isEmpty())
+            agendamentos = agendamentoRepository.getAll();
+        else
+            agendamentos = agendamentoRepository.getAllForResources(filtroRecursos);
+            
         
         scheduleModel = new DefaultScheduleModel();
         for(Agendamento ag : agendamentos)
