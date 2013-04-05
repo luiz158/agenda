@@ -40,7 +40,7 @@ public class AgendamentoDAO extends JPACrud<Agendamento, Integer> implements Age
         for (Recurso recurso : recursos) {
             ids.add(recurso.getId());
         }
-        return createQuery("select this from Recurso this where this.id in :recursos")
+        return createQuery("select this from Agendamento this where this.recurso.id in :recursos")
                 .setParameter("recursos", ids)
                 .getResultList();
     }

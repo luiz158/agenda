@@ -17,8 +17,6 @@ Any value defined here will override the pom.xml file value but is only applicab
         <netbeans.deploy.on.save>false</netbeans.deploy.on.save>
     </properties>
     <config-data xmlns="http://www.netbeans.org/ns/maven-config-data/1">
-        <configurations>
-            <configuration id="Tomcat 7" profiles="tomcat7"/>
-        </configurations>
+        <configurations/>
     </config-data>
 </project-shared-configuration>

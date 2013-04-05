@@ -11,11 +11,11 @@ import com.robsonp.agenda.view.schedule.AgendamentoScheduleEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
-import org.primefaces.event.DateSelectEvent;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
-import org.primefaces.event.ScheduleEntrySelectEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleModel;
 
@@ -45,6 +45,14 @@ public class AgendaMB {
         this.agendamento = agendamento;
     }
 
+    public List<Recurso> getFiltroRecursos() {
+        return filtroRecursos;
+    }
+
+    public void setFiltroRecursos(List<Recurso> filtroRecursos) {
+        this.filtroRecursos = filtroRecursos;
+    }
+
     public ScheduleModel getScheduleModel() {
         if(scheduleModel == null) 
             updateScheduleModel();
@@ -55,14 +63,15 @@ public class AgendaMB {
         this.scheduleModel = scheduleModel;
     }
     
-    public void onEventSelect(ScheduleEntrySelectEvent selectEvent) {
-        agendamento = ((AgendamentoScheduleEvent) selectEvent.getScheduleEvent()).getAgendamento();
+    public void onEventSelect(SelectEvent selectEvent) {
+        agendamento = ((AgendamentoScheduleEvent) selectEvent.getObject()).getAgendamento();
     }
 
-    public void onDateSelect(DateSelectEvent selectEvent) {
+    public void onDateSelect(SelectEvent selectEvent) {
         agendamento = new Agendamento();
-        agendamento.setInicio(selectEvent.getDate());
-        agendamento.setTermino(selectEvent.getDate());
+        Date selectedDate = (Date) selectEvent.getObject();
+        agendamento.setInicio(selectedDate);
+        agendamento.setTermino(selectedDate);
     }
 
     public void onEventMove(ScheduleEntryMoveEvent event) {
@@ -88,8 +97,10 @@ public class AgendaMB {
             
         
         scheduleModel = new DefaultScheduleModel();
-        for(Agendamento ag : agendamentos)
-            scheduleModel.addEvent(new AgendamentoScheduleEvent(ag));
+        for(Agendamento ag : agendamentos){
+            AgendamentoScheduleEvent event = new AgendamentoScheduleEvent(ag);
+            scheduleModel.addEvent(event);
+        }
     }
     
     public void criarAgendamento(){
@@ -118,5 +129,10 @@ public class AgendaMB {
             messageContext.add("Erro: " + e.getMessage(), SeverityType.ERROR);
         }
     }
+    
+    public void refreshAgenda(AjaxBehaviorEvent event) {
+        updateScheduleModel();
+    }
+    
     
 }

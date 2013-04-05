@@ -117,7 +117,11 @@
                                     oncomplete="dlgAgendamento.show()" 
                                     update="dlgAgendamentoDisplay"/>
                     </p:menu>
-                    <p:selectManyCheckbox converter="recursoConverter" layout="pageDirection">
+                    <p:selectManyCheckbox value="#{agendaMB.filtroRecursos}" converter="recursoConverter" layout="pageDirection">
+                        <p:ajax event="valueChange" 
+                                process="@this"
+                                update="agenda"
+                                listener="#{agendaMB.refreshAgenda}" />
                         <f:selectItems value="#{recursoMB.list}" var="rec" itemLabel="#{rec.nome}" itemValue="#{rec}" />
                     </p:selectManyCheckbox>
                 </p:layoutUnit>  
